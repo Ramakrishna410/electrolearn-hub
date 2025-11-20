@@ -1,0 +1,64 @@
+{
+  "name": "ESP32 Development Board",
+  "description": "A powerful, low-cost microcontroller with integrated Wi-Fi and Bluetooth capabilities, perfect for IoT projects.",
+  "image": "/images/esp32-board.jpg",
+  "pinoutImage": "/images/esp32-pinout.jpg",
+  "specifications": {
+    "processor": "Xtensa dual-core 32-bit LX6",
+    "clock": "Up to 240 MHz",
+    "memory": "520 KB SRAM",
+    "flash": "4 MB",
+    "connectivity": "Wi-Fi 802.11 b/g/n, Bluetooth 4.2",
+    "gpio": "34 programmable GPIOs",
+    "adc": "18 channels, 12-bit SAR ADC",
+    "dac": "2 channels, 8-bit DAC",
+    "uart": "3 UART interfaces",
+    "i2c": "2 I2C interfaces",
+    "spi": "4 SPI interfaces"
+  },
+  "components": [
+    {
+      "name": "ESP32-WROOM-32 Module",
+      "function": "Main microcontroller with integrated Wi-Fi and Bluetooth",
+      "datasheetLink": "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf"
+    },
+    {
+      "name": "CP2102 USB-to-UART Bridge",
+      "function": "Enables USB communication for programming and debugging",
+      "datasheetLink": "https://www.silabs.com/documents/public/data-sheets/CP2102-9.pdf"
+    },
+    {
+      "name": "AMS1117-3.3 Voltage Regulator",
+      "function": "Converts 5V USB power to 3.3V for the ESP32",
+      "datasheetLink": "http://www.advanced-monolithic.com/pdf/ds1117.pdf"
+    },
+    {
+      "name": "Reset & Boot Buttons",
+      "function": "Reset button restarts the chip, Boot button enables programming mode",
+      "datasheetLink": "#"
+    },
+    {
+      "name": "LED Indicators",
+      "function": "Power LED and programmable user LED (GPIO 2)",
+      "datasheetLink": "#"
+    }
+  ],
+  "exampleCode": "// Blink LED Example for ESP32\n// Connect LED to GPIO 2 (built-in LED)\n\nconst int ledPin = 2;\n\nvoid setup() {\n  // Initialize serial communication\n  Serial.begin(115200);\n  \n  // Set LED pin as output\n  pinMode(ledPin, OUTPUT);\n  \n  Serial.println(\"ESP32 LED Blink Starting...\");\n}\n\nvoid loop() {\n  // Turn LED on\n  digitalWrite(ledPin, HIGH);\n  Serial.println(\"LED ON\");\n  delay(1000); // Wait 1 second\n  \n  // Turn LED off\n  digitalWrite(ledPin, LOW);\n  Serial.println(\"LED OFF\");\n  delay(1000); // Wait 1 second\n}",
+  "features": [
+    "Dual-core processor for multitasking",
+    "Built-in Wi-Fi for IoT connectivity",
+    "Bluetooth Classic and BLE support",
+    "Low power consumption modes",
+    "Rich peripheral interfaces",
+    "Arduino IDE compatible",
+    "MicroPython support"
+  ],
+  "useCases": [
+    "IoT sensor networks",
+    "Home automation",
+    "Wearable devices",
+    "Wireless communication projects",
+    "Smart appliances",
+    "Data logging systems"
+  ]
+}
