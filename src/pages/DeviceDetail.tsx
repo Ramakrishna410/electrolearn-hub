@@ -5,9 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CodeBlock from "@/components/CodeBlock";
 import ModelViewer from "@/components/ModelViewer";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 import esp32Board from "@/assets/esp32-board.jpg";
-import esp32Pinout from "@/assets/esp32-pinout.jpg";
 
 interface Hotspot {
   id: string;
@@ -39,6 +38,9 @@ const DeviceDetail = () => {
   const { deviceId } = useParams();
   const [deviceData, setDeviceData] = useState<DeviceData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [componentsOpen, setComponentsOpen] = useState(true);
+  const [pinoutOpen, setPinoutOpen] = useState(true);
+  const [codeOpen, setCodeOpen] = useState(true);
 
   useEffect(() => {
     const fetchDeviceData = async () => {
@@ -159,46 +161,128 @@ const DeviceDetail = () => {
         </div>
 
         {/* Pinout Diagram */}
-        <Card className="p-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-foreground">Pinout Diagram</h2>
-          <div className="bg-secondary/30 rounded-lg overflow-hidden">
-            <img src={esp32Pinout} alt="ESP32 Pinout" className="w-full h-auto" />
+        <Card className="overflow-hidden mb-8">
+          <button
+            onClick={() => setPinoutOpen(!pinoutOpen)}
+            className="w-full p-6 flex items-center justify-between hover:bg-secondary/50 transition-colors"
+          >
+            <h2 className="text-2xl font-bold text-foreground">Pinout Diagram</h2>
+            {pinoutOpen ? (
+              <ChevronUp className="w-6 h-6 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="w-6 h-6 text-muted-foreground" />
+            )}
+          </button>
+          <div
+            className={`transition-all duration-300 ease-in-out overflow-hidden ${
+              pinoutOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="p-6 pt-0">
+              <div className="bg-secondary/30 rounded-lg overflow-hidden">
+                <img
+                  src={`/images/esp32_pinout.png`}
+                  alt="ESP32 Pinout"
+                  className="w-full h-auto"
+                  onError={(e) => {
+                    // Fallback to assets if public image doesn't exist
+                    e.currentTarget.src = "/images/esp32-pinout.jpg";
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </Card>
 
-        {/* Components List */}
-        <Card className="p-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-foreground">Components & Parts</h2>
-          <div className="space-y-4">
-            {deviceData.components.map((component, index) => (
-              <div key={index} className="p-4 bg-secondary/30 rounded-lg">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-bold text-foreground">{component.name}</h3>
-                  {component.datasheetLink !== "#" && (
-                    <a
-                      href={component.datasheetLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline flex items-center gap-1 text-sm"
-                    >
-                      Datasheet
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                </div>
-                <p className="text-muted-foreground text-sm">{component.function}</p>
+        {/* Components Table */}
+        <Card className="overflow-hidden mb-8">
+          <button
+            onClick={() => setComponentsOpen(!componentsOpen)}
+            className="w-full p-6 flex items-center justify-between hover:bg-secondary/50 transition-colors"
+          >
+            <h2 className="text-2xl font-bold text-foreground">Components & Parts</h2>
+            {componentsOpen ? (
+              <ChevronUp className="w-6 h-6 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="w-6 h-6 text-muted-foreground" />
+            )}
+          </button>
+          <div
+            className={`transition-all duration-300 ease-in-out overflow-hidden ${
+              componentsOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="p-6 pt-0">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left py-3 px-4 font-semibold text-foreground">Component Name</th>
+                      <th className="text-left py-3 px-4 font-semibold text-foreground">Function</th>
+                      <th className="text-left py-3 px-4 font-semibold text-foreground">Datasheet</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {deviceData.components.map((component, index) => (
+                      <tr
+                        key={index}
+                        className="border-b border-border/50 last:border-0 hover:bg-secondary/30 transition-colors"
+                      >
+                        <td className="py-4 px-4">
+                          <span className="font-medium text-foreground">{component.name}</span>
+                        </td>
+                        <td className="py-4 px-4 text-muted-foreground text-sm">
+                          {component.function}
+                        </td>
+                        <td className="py-4 px-4">
+                          {component.datasheetLink !== "#" ? (
+                            <a
+                              href={component.datasheetLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline flex items-center gap-1 text-sm"
+                            >
+                              View
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          ) : (
+                            <span className="text-muted-foreground text-sm">N/A</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            ))}
+            </div>
           </div>
         </Card>
 
         {/* Example Code */}
-        <Card className="p-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-foreground">Example Code</h2>
-          <p className="text-muted-foreground mb-4">
-            Get started with this simple LED blink example for the ESP32:
-          </p>
-          <CodeBlock code={deviceData.exampleCode} language="cpp" />
+        <Card className="overflow-hidden mb-8">
+          <button
+            onClick={() => setCodeOpen(!codeOpen)}
+            className="w-full p-6 flex items-center justify-between hover:bg-secondary/50 transition-colors"
+          >
+            <h2 className="text-2xl font-bold text-foreground">Example Code</h2>
+            {codeOpen ? (
+              <ChevronUp className="w-6 h-6 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="w-6 h-6 text-muted-foreground" />
+            )}
+          </button>
+          <div
+            className={`transition-all duration-300 ease-in-out overflow-hidden ${
+              codeOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="p-6 pt-0">
+              <p className="text-muted-foreground mb-4">
+                Get started with this simple LED blink example for the ESP32:
+              </p>
+              <CodeBlock code={deviceData.exampleCode} language="cpp" />
+            </div>
+          </div>
         </Card>
       </div>
     </div>
