@@ -4,9 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CodeBlock from "@/components/CodeBlock";
-import { ArrowLeft, ExternalLink, Box } from "lucide-react";
+import ModelViewer from "@/components/ModelViewer";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import esp32Board from "@/assets/esp32-board.jpg";
 import esp32Pinout from "@/assets/esp32-pinout.jpg";
+
+interface Hotspot {
+  id: string;
+  name: string;
+  description: string;
+  position: string;
+  normal: string;
+}
 
 interface DeviceData {
   name: string;
@@ -22,6 +31,8 @@ interface DeviceData {
   exampleCode: string;
   features: string[];
   useCases: string[];
+  modelPath?: string;
+  hotspots?: Hotspot[];
 }
 
 const DeviceDetail = () => {
@@ -94,16 +105,17 @@ const DeviceDetail = () => {
           <img src={esp32Board} alt={deviceData.name} className="w-full h-auto object-cover max-h-96" />
         </Card>
 
-        {/* 3D Viewer Placeholder */}
-        <Card className="p-8 mb-8 bg-secondary/30">
-          <div className="flex flex-col items-center justify-center min-h-[400px] border-2 border-dashed border-border rounded-lg">
-            <Box className="w-16 h-16 text-muted-foreground mb-4" />
-            <h3 className="text-xl font-bold mb-2 text-foreground">3D Model Viewer</h3>
-            <p className="text-muted-foreground text-center max-w-md">
-              Interactive 3D model viewer will be integrated here. Upload a GLB file to view the device in 3D.
-            </p>
+        {/* 3D Model Viewer */}
+        {deviceData.modelPath && deviceData.hotspots && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4 text-foreground">Interactive 3D Model</h2>
+            <ModelViewer
+              modelPath={deviceData.modelPath}
+              hotspots={deviceData.hotspots}
+              alt={`${deviceData.name} 3D Model`}
+            />
           </div>
-        </Card>
+        )}
 
         {/* Specifications */}
         <Card className="p-6 mb-8">

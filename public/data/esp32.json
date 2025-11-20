@@ -60,5 +60,29 @@
     "Wireless communication projects",
     "Smart appliances",
     "Data logging systems"
+  ],
+  "modelPath": "/models/esp32.glb",
+  "hotspots": [
+    {
+      "id": "hotspot-1",
+      "name": "ESP32-WROOM-32 Module",
+      "description": "Main microcontroller with integrated Wi-Fi and Bluetooth capabilities",
+      "position": "0m 0.05m 0m",
+      "normal": "0m 1m 0m"
+    },
+    {
+      "id": "hotspot-2",
+      "name": "USB-to-UART Bridge",
+      "description": "CP2102 chip enabling USB communication for programming and debugging",
+      "position": "-0.03m 0.02m 0.02m",
+      "normal": "0m 1m 0m"
+    },
+    {
+      "id": "hotspot-3",
+      "name": "Power Regulator",
+      "description": "AMS1117-3.3V voltage regulator converting 5V USB to 3.3V for ESP32",
+      "position": "0.03m 0.02m -0.02m",
+      "normal": "0m 1m 0m"
+    }
   ]
 }
